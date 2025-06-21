@@ -16,7 +16,10 @@ const sharedConfig = {
   migrations: ["src/migrations/*.ts"],
   synchronize: config.NODE_ENV === "development",
   logging: config.NODE_ENV === "development",
-  ssl: config.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl:
+    config.NODE_ENV === "production" && !process.env.DATABASE_SSL_DISABLED
+      ? { rejectUnauthorized: false }
+      : false,
 } satisfies DataSourceOptions;
 
 // For NestJS

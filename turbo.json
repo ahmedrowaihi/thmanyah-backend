@@ -44,7 +44,10 @@
     },
     "start:prod": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["**/dist/**"],
+      "dependsOn": ["^build"]
     }
   }
 }

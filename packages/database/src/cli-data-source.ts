@@ -15,5 +15,8 @@ export const CliDataSource = new DataSource({
   migrationsRun: false,
   synchronize: false,
   logging: true,
-  ssl: config.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl:
+    config.NODE_ENV === "production" && !process.env.DATABASE_SSL_DISABLED
+      ? { rejectUnauthorized: false }
+      : false,
 });

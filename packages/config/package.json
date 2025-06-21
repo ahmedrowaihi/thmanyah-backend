@@ -11,6 +11,7 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

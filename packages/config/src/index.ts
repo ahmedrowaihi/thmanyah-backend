@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { config as dotenvConfig } from "dotenv";
+
+dotenvConfig();
 
 // Environment-specific configuration requirements
 const environmentRequirements = {
