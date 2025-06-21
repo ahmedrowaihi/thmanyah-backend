@@ -1,0 +1,11 @@
+// Dependency Injection tokens
+export const PROGRAM_SERVICE = Symbol("PROGRAM_SERVICE");
+export const SEARCH_SERVICE = Symbol("SEARCH_SERVICE");
+export const QUEUE_SERVICE = Symbol("QUEUE_SERVICE");
+export const ELASTICSEARCH_HEALTH_SERVICE = Symbol(
+  "ELASTICSEARCH_HEALTH_SERVICE"
+);
+export const PROGRAM_INDEX_SERVICE = Symbol("PROGRAM_INDEX_SERVICE");
+export const METADATA_SERVICE = Symbol("METADATA_SERVICE");
+export const SEARCH_MAPPER_SERVICE = Symbol("SEARCH_MAPPER_SERVICE");
+export const OUTBOX_SERVICE = Symbol("OUTBOX_SERVICE");

@@ -1,0 +1,30 @@
+{
+  "name": "@thmanyah/database",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:packages": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "pnpm typeorm migration:generate -d src/data-source.ts",
+    "migration:run": "pnpm typeorm migration:run -d src/data-source.ts",
+    "migration:revert": "pnpm typeorm migration:revert -d src/data-source.ts",
+    "schema:sync": "pnpm typeorm schema:sync -d src/data-source.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.3",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "@thmanyah/config": "workspace:*",
+    "@thmanyah/shared": "workspace:*",
+    "pg": "^8.16.2",
+    "typeorm": "^0.3.25"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7"
+  }
+}

@@ -1,84 +1,259 @@
-# Turborepo starter
+# 🚀 Thmanyah Backend System
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modular, scalable backend system for managing and discovering media content (podcasts, documentaries, etc.) built with NestJS, TypeScript, and modern microservices architecture.
 
-## Using this example
+## 🏗️ Architecture
 
-Run the following command:
+The system consists of 4 main services:
 
-```sh
-npx create-turbo@latest
+- **CMS API** (`apps/cms-api`) - Internal API for editors to create/edit content
+- **Discovery API** (`apps/discovery-api`) - Public API for searching and viewing content
+- **Outbox Publisher** (`apps/outbox-publisher`) - Polls database and pushes events to queue
+- **Sync Worker** (`apps/sync-worker`) - Consumes queue jobs and syncs to Elasticsearch
+
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS + TypeScript
+- **Database**: PostgreSQL + TypeORM
+- **Queue**: Redis + BullMQ
+- **Search**: Elasticsearch
+- **Monorepo**: Turborepo
+- **Package Manager**: pnpm (workspaces)
+
+## 📦 Shared Packages
+
+- `@thmanyah/database` - TypeORM entities and database module
+- `@thmanyah/queue` - BullMQ queue setup and job types
+- `@thmanyah/elasticsearch` - ES client and index helpers
+- `@thmanyah/config` - Environment configuration with Zod validation
+- `@thmanyah/common` - Shared NestJS components, interceptors, filters, and configuration
+- `@thmanyah/shared` - Common interfaces and types for APIs and data models
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- Docker & Docker Compose
+
+### 1. Clone and Install
+
+```bash
+git clone <repository-url>
+cd thmanyah-backend
+pnpm install
 ```
 
-## What's inside?
+### 2. Environment Setup
 
-This Turborepo includes the following packages/apps:
+Create a `.env` file in the root directory:
 
-### Apps and Packages
+```bash
+# Environment
+NODE_ENV=development
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=password
+DATABASE_NAME=thmanyah
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
 
-### Utilities
+# Elasticsearch
+ELASTICSEARCH_URL=http://localhost:9200
+ELASTICSEARCH_USERNAME=elastic
+ELASTICSEARCH_PASSWORD=changeme
+ELASTICSEARCH_INDEX_NAME=programs
 
-This Turborepo has some additional tools already setup for you:
+# API Ports
+CMS_API_PORT=3001
+DISCOVERY_API_PORT=3002
+OUTBOX_PUBLISHER_PORT=3003
+SYNC_WORKER_PORT=3004
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+# Security (Optional)
+CORS_ORIGINS=http://localhost:3000
+API_RATE_LIMIT=100
+API_RATE_LIMIT_TTL=60000
 ```
-cd my-turborepo
+
+### 3. Start Infrastructure
+
+```bash
+# Start PostgreSQL, Redis, and Elasticsearch
+docker-compose up -d
+
+# Optional: Start Kibana for Elasticsearch management
+docker-compose --profile monitoring up -d
+```
+
+### 4. Build and Run
+
+```bash
+# Build all packages
 pnpm build
-```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
+# Start all services in development mode
 pnpm dev
+
+# Or start individual services
+pnpm --filter cms-api dev
+pnpm --filter discovery-api dev
+pnpm --filter outbox-publisher dev
+pnpm --filter sync-worker dev
 ```
 
-### Remote Caching
+## 📚 API Documentation
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Once running, you can access the Swagger documentation:
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- **CMS API**: http://localhost:3001/api
+- **Discovery API**: http://localhost:3002/api
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## 🔧 Development
+
+### Available Scripts
+
+```bash
+# Build all packages
+pnpm build
+
+# Build only packages (not apps)
+pnpm build:packages
+
+# Type checking
+pnpm check-types
+
+# Linting
+pnpm lint
+
+# Development mode (all services)
+pnpm dev
+
+# Clean all builds and dependencies
+pnpm clean
+
+# Monorepo validation
+pnpm monorepo:check
+pnpm monorepo:fix
+
+# Production start
+pnpm start:prod
+
+# Format code
+pnpm format
+```
+
+### Project Structure
 
 ```
-cd my-turborepo
-npx turbo login
+thmanyah-backend/
+├── apps/
+│   ├── cms-api/             # Internal CMS app
+│   ├── discovery-api/       # Public search app
+│   ├── outbox-publisher/    # Polls DB, pushes jobs
+│   └── sync-worker/         # Consumes queue, syncs ES
+├── packages/
+│   ├── database/            # Shared TypeORM entities
+│   ├── queue/               # BullMQ queue setup
+│   ├── elasticsearch/       # ES client & helpers
+│   ├── config/              # Shared config utils
+│   ├── common/              # NestJS interceptors, filters & config
+│   └── shared/              # Common interfaces & types
+├── docker-compose.yml       # Infrastructure
+└── turbo.json               # Turborepo config
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 🔄 Data Flow
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+1. **Content Creation**: Editors use CMS API to create/update programs
+2. **Outbox Events**: Changes are logged in the outbox table
+3. **Queue Processing**: Outbox Publisher polls and pushes events to Redis queue
+4. **Search Indexing**: Sync Worker consumes jobs and updates Elasticsearch
+5. **Content Discovery**: Users search via Discovery API (Elasticsearch)
 
+## 🧪 Testing
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests for specific app
+pnpm --filter cms-api test
+
+# E2E tests
+pnpm --filter cms-api test:e2e
 ```
-npx turbo link
+
+## 🚀 Production Deployment
+
+### Environment Variables
+
+Set appropriate environment variables for production:
+
+```bash
+NODE_ENV=production
+DATABASE_HOST=your-db-host
+DATABASE_PASSWORD=your-secure-password
+REDIS_HOST=your-redis-host
+ELASTICSEARCH_URL=your-es-url
+ELASTICSEARCH_PASSWORD=your-secure-password
+CORS_ORIGINS=https://your-frontend-domain.com
 ```
 
-## Useful Links
+### Deployment Options
 
-Learn more about the power of Turborepo:
+#### Option 1: Docker Deployment
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```bash
+# Build and run with production environment
+docker-compose up -d
+
+# Or build production images
+docker build -t thmanyah-backend .
+```
+
+#### Option 2: Direct Deployment
+
+```bash
+# Build all packages and apps
+pnpm build
+
+# Start production services
+pnpm start:prod
+```
+
+#### Option 3: Individual Service Deployment
+
+```bash
+# Build and start each service individually
+pnpm --filter cms-api build && pnpm --filter cms-api start:prod
+pnpm --filter discovery-api build && pnpm --filter discovery-api start:prod
+pnpm --filter outbox-publisher build && pnpm --filter outbox-publisher start:prod
+pnpm --filter sync-worker build && pnpm --filter sync-worker start:prod
+```
+
+## 📊 Monitoring
+
+- **Elasticsearch**: http://localhost:9200 (direct access)
+- **Kibana**: Available via `docker-compose --profile monitoring up -d` (commented out by default)
+- **Redis**: Available via Docker extension or `redis-cli -h localhost -p 6379`
+- **Health Checks**: Each service exposes `/health` endpoint
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.

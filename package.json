@@ -3,15 +3,21 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:packages": "pnpm --filter \"./packages/*\" build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "monorepo:check": "manypkg check",
+    "monorepo:fix": "manypkg fix",
+    "start:prod": "turbo run start:prod"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
+    "@manypkg/cli": "0.24.0",
+    "prettier": "^3.4.2",
     "turbo": "^2.5.4",
-    "typescript": "5.8.2"
+    "typescript": "^5.7.3"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

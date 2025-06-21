@@ -1,0 +1,23 @@
+{
+  "name": "@thmanyah/queue",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:packages": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.3",
+    "@thmanyah/config": "workspace:*",
+    "@thmanyah/shared": "workspace:*",
+    "bullmq": "5.54.3",
+    "ioredis": "^5.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7"
+  }
+}
