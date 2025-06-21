@@ -6,8 +6,13 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
-    "clean": "rm -rf dist"
+    "build:packages": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "test:cov": "jest --coverage --passWithNoTests"
   },
   "dependencies": {
     "@nestjs/swagger": "^11.2.0",

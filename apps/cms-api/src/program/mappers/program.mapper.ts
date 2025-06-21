@@ -9,13 +9,24 @@ import {
 @Injectable()
 export class ProgramMapper {
   /**
+   * Validates and parses date string
+   */
+  private parseDate(dateString: string): Date {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      throw new Error(`Invalid date format: ${dateString}`);
+    }
+    return date;
+  }
+
+  /**
    * Maps CreateProgramDto to Program entity
    */
   toEntity(createDto: CreateProgramDto): Partial<Program> {
     return {
       title: createDto.title,
       description: createDto.description,
-      publishDate: new Date(createDto.publishDate),
+      publishDate: this.parseDate(createDto.publishDate),
       type: createDto.type,
       language: createDto.language,
       tags: createDto.tags,
@@ -32,7 +43,7 @@ export class ProgramMapper {
     if (updateDto.description !== undefined)
       partial.description = updateDto.description;
     if (updateDto.publishDate !== undefined)
-      partial.publishDate = new Date(updateDto.publishDate);
+      partial.publishDate = this.parseDate(updateDto.publishDate);
     if (updateDto.type !== undefined) partial.type = updateDto.type;
     if (updateDto.language !== undefined) partial.language = updateDto.language;
     if (updateDto.tags !== undefined) partial.tags = updateDto.tags;

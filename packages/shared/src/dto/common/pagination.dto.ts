@@ -39,7 +39,7 @@ export class PaginatedResponseDto<T = any> {
   data!: T[];
 
   @ApiProperty({
-    description: "Pagination information",
+    description: "Pagination metadata",
     example: {
       page: 1,
       limit: 10,
@@ -47,7 +47,7 @@ export class PaginatedResponseDto<T = any> {
       totalPages: 3,
     },
   })
-  pagination!: {
+  meta!: {
     page: number;
     limit: number;
     total: number;

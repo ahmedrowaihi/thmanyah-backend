@@ -1,25 +1,23 @@
-import { Injectable, Logger, Inject } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
-import { ProgramMapper } from "./mappers/program.mapper";
-import { Program } from "@thmanyah/database";
 import { config } from "@thmanyah/config";
 import {
-  ProgramDocument,
   IProgramIndexService,
-  SearchPagination,
+  ProgramDocument,
   SearchFilters,
+  SearchPagination,
 } from "@thmanyah/shared";
 import {
-  ElasticsearchSearchResponse,
-  ElasticsearchSearchQuery,
-  ElasticsearchQuery,
-  ElasticsearchMultiMatchQuery,
-  ElasticsearchTermQuery,
-  ElasticsearchTermsQuery,
   ElasticsearchBoolQuery,
   ElasticsearchMatchAllQuery,
+  ElasticsearchMultiMatchQuery,
+  ElasticsearchQuery,
+  ElasticsearchSearchQuery,
   ElasticsearchSort,
+  ElasticsearchTermQuery,
+  ElasticsearchTermsQuery,
 } from "./interfaces/elasticsearch.interface";
+import { ProgramMapper } from "./mappers/program.mapper";
 
 const INDEX_NAME = config.ELASTICSEARCH_INDEX_NAME || "programs";
 
@@ -55,9 +53,7 @@ export class ProgramIndexService implements IProgramIndexService {
       if (!exists) {
         await this.elasticsearchService.indices.create({
           index: INDEX_NAME,
-          body: {
-            mappings: mapping,
-          },
+          mappings: mapping,
         });
         this.logger.log(`Index ${INDEX_NAME} created successfully`);
       } else {
@@ -74,7 +70,7 @@ export class ProgramIndexService implements IProgramIndexService {
       await this.elasticsearchService.index({
         index: INDEX_NAME,
         id: program.id.toString(),
-        body: program,
+        document: program,
       });
       this.logger.debug(
         `Document ${program.id} indexed successfully in ${INDEX_NAME}`
@@ -169,7 +165,7 @@ export class ProgramIndexService implements IProgramIndexService {
       const searchQuery = this.buildSearchQuery(query, filters);
       const response = await this.elasticsearchService.search<ProgramDocument>({
         index: INDEX_NAME,
-        body: searchQuery,
+        ...searchQuery,
       });
 
       const total =

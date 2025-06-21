@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import {
@@ -172,10 +177,23 @@ export class ProgramService implements IProgramService {
   // Legacy methods for backward compatibility with existing DTOs
   async createWithDto(createProgramDto: unknown): Promise<ProgramResponseDto> {
     if (typeof createProgramDto !== 'object' || createProgramDto === null) {
-      throw new Error('Invalid argument: createProgramDto must be an object');
+      throw new BadRequestException(
+        'Invalid argument: createProgramDto must be an object',
+      );
     }
-    const program = await this.create(createProgramDto as CreateProgramDto);
-    return this.programMapper.toResponseDto(program);
+
+    try {
+      const program = await this.create(createProgramDto as CreateProgramDto);
+      return this.programMapper.toResponseDto(program);
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes('Invalid date format')
+      ) {
+        throw new BadRequestException('Invalid date format provided');
+      }
+      throw error;
+    }
   }
 
   async bulkCreateWithDto(
@@ -204,7 +222,7 @@ export class ProgramService implements IProgramService {
 
     return {
       data: responseDtos,
-      pagination: {
+      meta: {
         page,
         limit,
         total: result.total,

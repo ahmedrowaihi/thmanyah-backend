@@ -18,6 +18,23 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:watch": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "test:cov": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
     "clean": {
       "cache": false
     },
@@ -26,7 +43,8 @@
       "persistent": true
     },
     "start:prod": {
-      "dependsOn": ["^build:packages", "^build", "^start:prod"]
+      "cache": false,
+      "persistent": true
     }
   }
 }

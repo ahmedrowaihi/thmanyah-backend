@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import { AppModule } from './../src/app.module';
-import { OutboxPublisherService } from './../src/outbox-publisher/outbox-publisher.service';
+import { OutboxPublisherService } from '../src/outbox-publisher/outbox-publisher.service';
 
-describe('OutboxPublisherService (e2e)', () => {
+describe('Outbox Publisher (e2e)', () => {
+  let app: INestApplication;
   let outboxPublisherService: OutboxPublisherService;
 
   beforeEach(async () => {
@@ -10,18 +12,30 @@ describe('OutboxPublisherService (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
+    app = moduleFixture.createNestApplication();
     outboxPublisherService = moduleFixture.get<OutboxPublisherService>(
       OutboxPublisherService,
     );
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(outboxPublisherService).toBeDefined();
+  afterEach(async () => {
+    await app.close();
   });
 
-  it('should have cron job initialized', () => {
-    expect(outboxPublisherService).toBeDefined();
-    // Note: In a real test, you might want to check if the cron job is properly initialized
-    // but since it's a private method, we just verify the service exists
+  describe('OutboxPublisherService', () => {
+    it('should be defined', () => {
+      expect(outboxPublisherService).toBeDefined();
+    });
+
+    it('should have publishOutboxEvents method', () => {
+      expect(typeof outboxPublisherService.publishOutboxEvents).toBe(
+        'function',
+      );
+    });
+
+    it('should be an instance of OutboxPublisherService', () => {
+      expect(outboxPublisherService).toBeInstanceOf(OutboxPublisherService);
+    });
   });
 });

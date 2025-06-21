@@ -3,7 +3,7 @@ import { config } from "@thmanyah/config";
 import { Program } from "./entities/program.entity";
 import { Outbox } from "./entities/outbox.entity";
 
-export const AppDataSource = new DataSource({
+export const CliDataSource = new DataSource({
   type: "postgres",
   host: config.DATABASE_HOST,
   port: config.DATABASE_PORT,
@@ -11,9 +11,9 @@ export const AppDataSource = new DataSource({
   password: config.DATABASE_PASSWORD,
   database: config.DATABASE_NAME,
   entities: [Program, Outbox],
-  migrations: ["src/migrations/*.ts"],
+  migrations: ["dist/migrations/*.js"],
   migrationsRun: false,
-  synchronize: config.NODE_ENV === "development",
-  logging: config.NODE_ENV === "development",
+  synchronize: false,
+  logging: true,
   ssl: config.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
