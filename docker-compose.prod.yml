@@ -51,6 +51,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: cms-api
+      args:
+        TARGET_APP: cms-api
     environment:
       NODE_ENV: production
       DATABASE_HOST: postgres
@@ -84,6 +86,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: discovery-api
+      args:
+        TARGET_APP: discovery-api
     environment:
       NODE_ENV: production
       DATABASE_HOST: postgres
@@ -117,6 +121,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: outbox-publisher
+      args:
+        TARGET_APP: outbox-publisher
     environment:
       NODE_ENV: production
       DATABASE_HOST: postgres
@@ -146,6 +152,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: sync-worker
+      args:
+        TARGET_APP: sync-worker
     environment:
       NODE_ENV: production
       DATABASE_HOST: postgres
