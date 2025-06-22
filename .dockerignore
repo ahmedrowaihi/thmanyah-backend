@@ -75,5 +75,6 @@ coverage
 # !tsconfig.base.json
 
 # Additional patterns to ignore for production images
+.passwords.txt
+src
 test
-src 

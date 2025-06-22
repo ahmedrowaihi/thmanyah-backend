@@ -63,16 +63,16 @@ pnpm docker:build:sync-worker
 
 ```bash
 # CMS API
-docker build --target cms-api -t thmanyah/cms-api .
+docker build --build-arg TARGET_APP=cms-api -t thmanyah/cms-api .
 
 # Discovery API
-docker build --target discovery-api -t thmanyah/discovery-api .
+docker build --build-arg TARGET_APP=discovery-api -t thmanyah/discovery-api .
 
 # Outbox Publisher
-docker build --target outbox-publisher -t thmanyah/outbox-publisher .
+docker build --build-arg TARGET_APP=outbox-publisher -t thmanyah/outbox-publisher .
 
 # Sync Worker
-docker build --target sync-worker -t thmanyah/sync-worker .
+docker build --build-arg TARGET_APP=sync-worker -t thmanyah/sync-worker .
 ```
 
 ### Run Individual Containers
@@ -269,10 +269,10 @@ docker-compose -f docker-compose.prod.yml logs -f cms-api
 
 ```bash
 # Clean build (no cache)
-docker build --no-cache --target cms-api -t thmanyah/cms-api .
+docker build --no-cache --build-arg TARGET_APP=cms-api -t thmanyah/cms-api .
 
 # Build with verbose output
-docker build --progress=plain --target cms-api -t thmanyah/cms-api .
+docker build --progress=plain --build-arg TARGET_APP=cms-api -t thmanyah/cms-api .
 ```
 
 ### Runtime Issues

@@ -1,83 +1,66 @@
 # Multi-stage build for Thmanyah Backend Monorepo
 FROM node:18-alpine AS base
 
+# Accept build argument for target app
+ARG TARGET_APP=cms-api
+
 # Install pnpm
 RUN npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
 
-# Copy all source code
-COPY . .
+# Copy package files first for better caching
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/*/package.json ./packages/
+COPY apps/${TARGET_APP}/package.json ./apps/${TARGET_APP}/
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies (this layer will be cached unless package files change)
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# Build all packages and apps
-RUN pnpm build
+# Copy only the target app and shared packages
+COPY packages/ ./packages/
+COPY apps/${TARGET_APP}/ ./apps/${TARGET_APP}/
+COPY tsconfig*.json ./
+COPY jest*.js ./
 
-# Deploy each service with only its dependencies
-RUN pnpm --filter=cms-api --prod deploy /deploy/cms-api
-RUN pnpm --filter=discovery-api --prod deploy /deploy/discovery-api
-RUN pnpm --filter=outbox-publisher --prod deploy /deploy/outbox-publisher
-RUN pnpm --filter=sync-worker --prod deploy /deploy/sync-worker
+# Install dependencies again to ensure workspace linking
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# Copy the built dist directories to each deployed service
-RUN cp -r apps/cms-api/dist /deploy/cms-api/
-RUN cp -r apps/discovery-api/dist /deploy/discovery-api/
-RUN cp -r apps/outbox-publisher/dist /deploy/outbox-publisher/
-RUN cp -r apps/sync-worker/dist /deploy/sync-worker/
+# Build packages first, then the target app
+RUN pnpm --filter="./packages/*" build && pnpm --filter=${TARGET_APP} build
+
+# Deploy only the target service with its dependencies
+RUN pnpm --filter=${TARGET_APP} --ignore-scripts --prod deploy /deploy/${TARGET_APP}
+
+# Copy the built dist directory to the deployed service
+RUN cp -r apps/${TARGET_APP}/dist /deploy/${TARGET_APP}/
 
 # =============================================================================
-# CMS API Image
+# Target App Image (dynamically named based on TARGET_APP)
 # =============================================================================
-FROM node:18-alpine AS cms-api
+FROM node:18-alpine AS target-app
+
+# Accept build argument for target app
+ARG TARGET_APP=cms-api
 
 WORKDIR /app
 ENV NODE_ENV=production
 
 # Copy deployed service with minimal dependencies
-COPY --from=base /deploy/cms-api .
+COPY --from=base /deploy/${TARGET_APP} .
 
+CMD ["node", "--experimental-global-webcrypto", "dist/main"]
+
+# =============================================================================
+# App-specific stages with proper port exposure
+# =============================================================================
+FROM target-app AS cms-api
 EXPOSE 3001
-CMD ["node", "--experimental-global-webcrypto", "dist/main"]
 
-# =============================================================================
-# Discovery API Image
-# =============================================================================
-FROM node:18-alpine AS discovery-api
-
-WORKDIR /app
-ENV NODE_ENV=production
-
-# Copy deployed service with minimal dependencies
-COPY --from=base /deploy/discovery-api .
-
+FROM target-app AS discovery-api
 EXPOSE 3002
-CMD ["node", "--experimental-global-webcrypto", "dist/main"]
 
-# =============================================================================
-# Outbox Publisher Image
-# =============================================================================
-FROM node:18-alpine AS outbox-publisher
+FROM target-app AS outbox-publisher
 
-WORKDIR /app
-ENV NODE_ENV=production
-
-# Copy deployed service with minimal dependencies
-COPY --from=base /deploy/outbox-publisher .
-
-CMD ["node", "--experimental-global-webcrypto", "dist/main"]
-
-# =============================================================================
-# Sync Worker Image
-# =============================================================================
-FROM node:18-alpine AS sync-worker
-
-WORKDIR /app
-ENV NODE_ENV=production
-
-# Copy deployed service with minimal dependencies
-COPY --from=base /deploy/sync-worker .
-
-CMD ["node", "--experimental-global-webcrypto", "dist/main"] 
+FROM target-app AS sync-worker 

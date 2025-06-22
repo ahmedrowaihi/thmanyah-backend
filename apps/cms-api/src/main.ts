@@ -30,7 +30,6 @@ async function runMigrationsIfNeeded() {
     await dataSource.initialize();
     await dataSource.runMigrations();
     await dataSource.destroy();
-    // eslint-disable-next-line no-console
     console.log('✅ Database migrations complete');
   }
 }

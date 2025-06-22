@@ -17,11 +17,15 @@ import {
       maxRetries: 3,
       requestTimeout: 10000,
       sniffOnStart: false,
-      // Note: Authentication is disabled in docker-compose
-      // auth: {
-      //   username: config.ELASTICSEARCH_USERNAME,
-      //   password: config.ELASTICSEARCH_PASSWORD,
-      // },
+      // Enable authentication only if credentials are provided
+      ...(config.ELASTICSEARCH_USERNAME && config.ELASTICSEARCH_PASSWORD
+        ? {
+            auth: {
+              username: config.ELASTICSEARCH_USERNAME,
+              password: config.ELASTICSEARCH_PASSWORD,
+            },
+          }
+        : {}),
     }),
   ],
   providers: [
