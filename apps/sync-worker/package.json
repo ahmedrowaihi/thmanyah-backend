@@ -20,7 +20,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "check-types": "tsc --noEmit",
     "dev": "nest start --watch",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo",
+    "docs:generate": "compodoc -p tsconfig.json -d docs -n \"Sync Worker Documentation\"",
+    "docs:serve": "compodoc -p tsconfig.json -s -w -n \"Sync Worker Documentation\" --port 8083",
+    "docs:build": "compodoc -p tsconfig.json -d docs -n \"Sync Worker Documentation\""
   },
   "dependencies": {
     "@nestjs/common": "^11.0.3",

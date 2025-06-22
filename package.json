@@ -30,9 +30,13 @@
     "db:migrate:generate": "pnpm --filter @thmanyah/database migration:generate",
     "db:migrate:revert": "pnpm --filter @thmanyah/database migration:revert",
     "db:schema:sync": "pnpm --filter @thmanyah/database schema:sync",
-    "postinstall": "pnpm build:packages && pnpm setup:env"
+    "postinstall": "pnpm build:packages && pnpm setup:env",
+    "docs:generate": "turbo run docs:build",
+    "docs:serve": "turbo run docs:serve",
+    "docs:build": "turbo run docs:build"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "1.1.26",
     "@manypkg/cli": "0.24.0",
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",

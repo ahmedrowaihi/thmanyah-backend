@@ -28,7 +28,10 @@
     "test:coverage": "jest --coverage --coverageReporters=text --coverageReporters=lcov --coverageReporters=html",
     "check-types": "tsc --noEmit",
     "dev": "nest start --watch",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo node_modules .turbo",
+    "docs:generate": "compodoc -p tsconfig.json -d docs -n \"CMS API Documentation\"",
+    "docs:serve": "compodoc -p tsconfig.json -s -w -n \"CMS API Documentation\" --port 8080",
+    "docs:build": "compodoc -p tsconfig.json -d docs -n \"CMS API Documentation\""
   },
   "dependencies": {
     "@nestjs/common": "^11.0.3",

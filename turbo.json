@@ -48,6 +48,17 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["**/dist/**"],
       "dependsOn": ["^build"]
+    },
+    "docs:generate": {
+      "cache": false,
+      "persistent": true
+    },
+    "docs:serve": {
+      "cache": false,
+      "persistent": true
+    },
+    "docs:build": {
+      "cache": false
     }
   }
 }

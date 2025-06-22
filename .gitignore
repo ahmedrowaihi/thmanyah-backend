@@ -55,3 +55,8 @@ test-scripts/
 *.tfplan.backup.json.gz.base64
 *.tfplan.backup.json.gz.base64.gz
 .terraform
+
+
+# Documentation
+docs-hub/
+documentation
