@@ -138,4 +138,42 @@ variable "docker_image_tags" {
     outbox_publisher  = "latest"
     sync_worker       = "latest"
   }
+}
+
+# CORS Configuration
+variable "cors_origins" {
+  description = "Comma-separated list of allowed CORS origins"
+  type        = string
+  default     = "http://localhost:3000,http://localhost:3001,http://localhost:3002"
+}
+
+variable "cors_allowed_headers" {
+  description = "Comma-separated list of allowed CORS headers"
+  type        = string
+  default     = "Content-Type,Authorization,X-Requested-With,x-request-id,x-api-version"
+}
+
+# OpenAPI/Swagger Configuration
+variable "cms_api_server_url" {
+  description = "CMS API server URL for OpenAPI documentation"
+  type        = string
+  default     = "http://localhost:3001"
+}
+
+variable "discovery_api_server_url" {
+  description = "Discovery API server URL for OpenAPI documentation"
+  type        = string
+  default     = "http://localhost:3002"
+}
+
+variable "cms_api_server_description" {
+  description = "CMS API server description for OpenAPI documentation"
+  type        = string
+  default     = "Development server"
+}
+
+variable "discovery_api_server_description" {
+  description = "Discovery API server description for OpenAPI documentation"
+  type        = string
+  default     = "Development server"
 } 

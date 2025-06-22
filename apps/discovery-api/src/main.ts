@@ -17,21 +17,11 @@ async function bootstrap() {
     version: '1.0',
     tag: 'search',
     tagDescription: 'Search and discovery endpoints',
-    serverUrl: 'http://localhost:3002',
-    serverDescription: 'Development server',
+    serverUrl: config.DISCOVERY_API_SERVER_URL,
+    serverDescription: config.DISCOVERY_API_SERVER_DESCRIPTION,
     port: config.DISCOVERY_API_PORT,
-    corsOrigins: [
-      'http://localhost:3000', // Frontend development
-      'http://localhost:3001', // CMS API
-      'http://localhost:3002', // Discovery API itself
-    ],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'X-Requested-With',
-      'x-request-id',
-      'x-api-version',
-    ],
+    corsOrigins: config.CORS_ORIGINS.split(','),
+    allowedHeaders: config.CORS_ALLOWED_HEADERS.split(','),
   });
 
   await app.listen(config.DISCOVERY_API_PORT);

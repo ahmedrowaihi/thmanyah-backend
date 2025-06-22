@@ -353,6 +353,38 @@ resource "aws_ecs_task_definition" "cms_api" {
         {
           name  = "REDIS_PORT"
           value = var.redis_port
+        },
+        {
+          name  = "CMS_API_PORT"
+          value = "3001"
+        },
+        {
+          name  = "DISCOVERY_API_PORT"
+          value = "3002"
+        },
+        {
+          name  = "CORS_ORIGINS"
+          value = var.cors_origins
+        },
+        {
+          name  = "CORS_ALLOWED_HEADERS"
+          value = var.cors_allowed_headers
+        },
+        {
+          name  = "CMS_API_SERVER_URL"
+          value = var.cms_api_server_url
+        },
+        {
+          name  = "DISCOVERY_API_SERVER_URL"
+          value = var.discovery_api_server_url
+        },
+        {
+          name  = "CMS_API_SERVER_DESCRIPTION"
+          value = var.cms_api_server_description
+        },
+        {
+          name  = "DISCOVERY_API_SERVER_DESCRIPTION"
+          value = var.discovery_api_server_description
         }
       ], var.elasticsearch_endpoint != null ? [
         {
@@ -454,6 +486,38 @@ resource "aws_ecs_task_definition" "discovery_api" {
         {
           name  = "REDIS_PORT"
           value = var.redis_port
+        },
+        {
+          name  = "CMS_API_PORT"
+          value = "3001"
+        },
+        {
+          name  = "DISCOVERY_API_PORT"
+          value = "3002"
+        },
+        {
+          name  = "CORS_ORIGINS"
+          value = var.cors_origins
+        },
+        {
+          name  = "CORS_ALLOWED_HEADERS"
+          value = var.cors_allowed_headers
+        },
+        {
+          name  = "CMS_API_SERVER_URL"
+          value = var.cms_api_server_url
+        },
+        {
+          name  = "DISCOVERY_API_SERVER_URL"
+          value = var.discovery_api_server_url
+        },
+        {
+          name  = "CMS_API_SERVER_DESCRIPTION"
+          value = var.cms_api_server_description
+        },
+        {
+          name  = "DISCOVERY_API_SERVER_DESCRIPTION"
+          value = var.discovery_api_server_description
         }
       ], var.elasticsearch_endpoint != null ? [
         {

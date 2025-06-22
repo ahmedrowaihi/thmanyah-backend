@@ -53,14 +53,11 @@ async function bootstrap() {
       version: '1.0',
       tag: 'programs',
       tagDescription: 'Program management endpoints',
-      serverUrl: 'http://localhost:3001',
-      serverDescription: 'Development server',
+      serverUrl: config.CMS_API_SERVER_URL,
+      serverDescription: config.CMS_API_SERVER_DESCRIPTION,
       port: config.CMS_API_PORT,
-      corsOrigins: [
-        'http://localhost:3000', // Frontend development
-        'http://localhost:3001', // CMS API itself
-        'http://localhost:3002', // Discovery API
-      ],
+      corsOrigins: config.CORS_ORIGINS.split(','),
+      allowedHeaders: config.CORS_ALLOWED_HEADERS.split(','),
     },
     [new MetricsInterceptor()],
   );

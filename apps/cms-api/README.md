@@ -1,98 +1,222 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🎛️ Thmanyah CMS API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Internal Content Management System API for creating, updating, and managing media content (podcasts, documentaries, etc.) in the Thmanyah platform.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 Purpose
 
-## Description
+The CMS API serves as the internal administrative interface for content editors and administrators to:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Create and manage program content
+- Update program metadata and details
+- Handle bulk operations for content management
+- Provide administrative endpoints for content curation
 
-## Project setup
+## 🏗️ Architecture
 
-```bash
-$ pnpm install
+This service is part of the Thmanyah microservices architecture:
+
+```
+CMS API → Database (PostgreSQL) → Outbox Table → Outbox Publisher → Queue → Sync Worker → Elasticsearch
 ```
 
-## Compile and run the project
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS + TypeScript
+- **Database**: PostgreSQL + TypeORM
+- **Validation**: Class-validator + Class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Jest + Supertest
+
+## 📋 Features
+
+### Program Management
+
+- ✅ Create new programs with metadata (title, description, publishDate, type, language, tags)
+- ✅ Update existing program details
+- ✅ Delete programs (soft delete)
+- ✅ Bulk create/update/delete operations
+- ✅ Program validation and sanitization
+
+### API Endpoints
+
+#### Programs
+
+- `POST /programs` - Create a new program
+- `GET /programs/:id` - Get program by ID
+- `PUT /programs/:id` - Update program
+- `DELETE /programs/:id` - Delete program
+- `POST /programs/bulk` - Bulk operations
+
+#### Health
+
+- `GET /health` - Service health check
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- Redis (for queue operations)
+- Environment variables configured
+
+### Development
 
 ```bash
-# development
-$ pnpm run start
+# Install dependencies (from root)
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
+# Start in development mode
+pnpm --filter cms-api dev
 
-# production mode
-$ pnpm run start:prod
+# Or from the app directory
+cd apps/cms-api
+pnpm dev
 ```
 
-## Run tests
+### Environment Variables
+
+Required environment variables (see root `.env.example`):
+
+```env
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=password
+DATABASE_NAME=thmanyah
+
+# Redis (for queue)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# API Configuration
+CMS_API_PORT=3001
+NODE_ENV=development
+```
+
+## 📚 API Documentation
+
+Once running, access the Swagger documentation at:
+
+**http://localhost:3001/api**
+
+## 🧪 Testing
 
 ```bash
-# unit tests
-$ pnpm run test
+# Unit tests
+pnpm --filter cms-api test
 
-# e2e tests
-$ pnpm run test:e2e
+# E2E tests
+pnpm --filter cms-api test:e2e
 
-# test coverage
-$ pnpm run test:cov
+# Test coverage
+pnpm --filter cms-api test:cov
+
+# Watch mode
+pnpm --filter cms-api test:watch
 ```
 
-## Deployment
+## 🔧 Development
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Available Scripts
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Development
+pnpm dev                    # Start in development mode
+pnpm start                  # Start in production mode
+pnpm start:dev              # Start with watch mode
+pnpm start:debug            # Start in debug mode
+pnpm start:prod             # Start in production mode
+
+# Testing
+pnpm test                   # Run unit tests
+pnpm test:watch             # Run tests in watch mode
+pnpm test:cov               # Run tests with coverage
+pnpm test:debug             # Run tests in debug mode
+pnpm test:e2e               # Run e2e tests
+
+# Building
+pnpm build                  # Build the application
+pnpm build:watch            # Build in watch mode
+
+# Linting
+pnpm lint                   # Run ESLint
+pnpm lint:fix               # Fix ESLint issues
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Project Structure
 
-## Resources
+```
+apps/cms-api/
+├── src/
+│   ├── app.module.ts           # Main application module
+│   ├── main.ts                 # Application entry point
+│   ├── common/                 # Shared utilities
+│   │   ├── filters/            # Exception filters
+│   │   └── interceptors/       # Request/response interceptors
+│   ├── health/                 # Health check endpoints
+│   └── program/                # Program management
+│       ├── program.controller.ts
+│       ├── program.service.ts
+│       ├── program.module.ts
+│       └── mappers/            # Data transformation
+├── test/                       # E2E tests
+└── package.json
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🔄 Data Flow
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+1. **Content Creation**: Editors use CMS API to create/update programs (fields: title, description, publishDate, type, language, tags)
+2. **Database Storage**: Changes are saved to PostgreSQL
+3. **Outbox Pattern**: Changes trigger outbox events for eventual consistency
+4. **Queue Processing**: Outbox Publisher picks up events and queues them
+5. **Search Indexing**: Sync Worker processes queue and updates Elasticsearch
 
-## Support
+## 🔒 Security
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Input validation and sanitization
+- Rate limiting
+- CORS configuration
+- Request/response logging
+- Error handling with proper HTTP status codes
 
-## Stay in touch
+## 📊 Monitoring
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Health check endpoint: `GET /health`
+- Request/response logging via interceptors
+- Error tracking and reporting
+- Performance metrics
 
-## License
+## 🚀 Deployment
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Docker
+
+```bash
+# Build image
+docker build --build-arg TARGET_APP=cms-api -t thmanyah/cms-api .
+
+# Run container
+docker run -p 3001:3001 --env-file .env thmanyah/cms-api
+```
+
+### Production
+
+```bash
+# Build for production
+pnpm --filter cms-api build
+
+# Start production server
+pnpm --filter cms-api start:prod
+```
+
+## 🤝 Contributing
+
+1. Follow the project's coding standards
+2. Add tests for new features
+3. Update API documentation
+4. Ensure all tests pass before submitting
+
+## 📄 License
+
+This project is part of the Thmanyah backend system and is licensed under the MIT License.

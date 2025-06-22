@@ -71,6 +71,24 @@ const envSchema = z.object({
   // API Ports - Always have defaults
   CMS_API_PORT: z.string().transform(Number).default("3001"),
   DISCOVERY_API_PORT: z.string().transform(Number).default("3002"),
+
+  // CORS Configuration
+  CORS_ORIGINS: z
+    .string()
+    .default(
+      "http://localhost:3000,http://localhost:3001,http://localhost:3002"
+    ),
+  CORS_ALLOWED_HEADERS: z
+    .string()
+    .default(
+      "Content-Type,Authorization,X-Requested-With,x-request-id,x-api-version"
+    ),
+
+  // OpenAPI/Swagger Configuration
+  CMS_API_SERVER_URL: z.string().default("http://localhost:3001"),
+  DISCOVERY_API_SERVER_URL: z.string().default("http://localhost:3002"),
+  CMS_API_SERVER_DESCRIPTION: z.string().default("Development server"),
+  DISCOVERY_API_SERVER_DESCRIPTION: z.string().default("Development server"),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
@@ -206,6 +224,10 @@ function logConfigurationSummary(config: EnvConfig, env: string): void {
   console.log(`  🔍 Elasticsearch: ${config.ELASTICSEARCH_URL}`);
   console.log(
     `  🚀 API Ports: CMS(${config.CMS_API_PORT}), Discovery(${config.DISCOVERY_API_PORT})`
+  );
+  console.log(`  🌐 CORS Origins: ${config.CORS_ORIGINS}`);
+  console.log(
+    `  📚 OpenAPI Servers: CMS(${config.CMS_API_SERVER_URL}), Discovery(${config.DISCOVERY_API_SERVER_URL})`
   );
 
   if (env === "development" || env === "test") {

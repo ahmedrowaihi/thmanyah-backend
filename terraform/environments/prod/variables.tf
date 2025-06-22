@@ -177,4 +177,42 @@ variable "jwt_secret" {
   description = "JWT secret for authentication"
   type        = string
   sensitive   = true
+}
+
+# CORS Configuration
+variable "cors_origins" {
+  description = "Comma-separated list of allowed CORS origins"
+  type        = string
+  default     = "https://your-frontend-domain.com"
+}
+
+variable "cors_allowed_headers" {
+  description = "Comma-separated list of allowed CORS headers"
+  type        = string
+  default     = "Content-Type,Authorization,X-Requested-With,x-request-id,x-api-version"
+}
+
+# OpenAPI/Swagger Configuration
+variable "cms_api_server_url" {
+  description = "CMS API server URL for OpenAPI documentation"
+  type        = string
+  default     = "https://your-cms-api-domain.com"
+}
+
+variable "discovery_api_server_url" {
+  description = "Discovery API server URL for OpenAPI documentation"
+  type        = string
+  default     = "https://your-discovery-api-domain.com"
+}
+
+variable "cms_api_server_description" {
+  description = "CMS API server description for OpenAPI documentation"
+  type        = string
+  default     = "Production server"
+}
+
+variable "discovery_api_server_description" {
+  description = "Discovery API server description for OpenAPI documentation"
+  type        = string
+  default     = "Production server"
 } 

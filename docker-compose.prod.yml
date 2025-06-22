@@ -70,6 +70,14 @@ services:
       ELASTICSEARCH_INDEX_NAME: programs
       CMS_API_PORT: 3001
       DISCOVERY_API_PORT: 3002
+      # CORS Configuration
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3001,http://localhost:3002
+      CORS_ALLOWED_HEADERS: Content-Type,Authorization,X-Requested-With,x-request-id,x-api-version
+      # OpenAPI Configuration
+      CMS_API_SERVER_URL: http://localhost:3001
+      DISCOVERY_API_SERVER_URL: http://localhost:3002
+      CMS_API_SERVER_DESCRIPTION: Production server
+      DISCOVERY_API_SERVER_DESCRIPTION: Production server
     ports:
       - "3001:3001"
     depends_on:
@@ -105,6 +113,14 @@ services:
       ELASTICSEARCH_INDEX_NAME: programs
       CMS_API_PORT: 3001
       DISCOVERY_API_PORT: 3002
+      # CORS Configuration
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3001,http://localhost:3002
+      CORS_ALLOWED_HEADERS: Content-Type,Authorization,X-Requested-With,x-request-id,x-api-version
+      # OpenAPI Configuration
+      CMS_API_SERVER_URL: http://localhost:3001
+      DISCOVERY_API_SERVER_URL: http://localhost:3002
+      CMS_API_SERVER_DESCRIPTION: Production server
+      DISCOVERY_API_SERVER_DESCRIPTION: Production server
     ports:
       - "3002:3002"
     depends_on:

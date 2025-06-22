@@ -1,98 +1,289 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🔍 Thmanyah Discovery API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Public search and discovery API for finding and exploring media content (podcasts, documentaries, etc.) in the Thmanyah platform.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 Purpose
 
-## Description
+The Discovery API serves as the public-facing search interface that allows users to:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Search for programs using full-text search
+- Filter and sort search results
+- Discover new content through recommendations
+- Access program metadata and details
+- Browse content with pagination support
 
-## Project setup
+## 🏗️ Architecture
 
-```bash
-$ pnpm install
+This service is part of the Thmanyah microservices architecture:
+
+```
+Discovery API → Elasticsearch → Search Results
 ```
 
-## Compile and run the project
+The Discovery API is read-only and serves content that has been indexed by the Sync Worker from the CMS API.
+
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS + TypeScript
+- **Search Engine**: Elasticsearch
+- **Validation**: Class-validator + Class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Jest + Supertest
+
+## 📋 Features
+
+### Search Capabilities
+
+- ✅ Full-text search across program content
+- ✅ Advanced filtering (category, duration, language, etc.)
+- ✅ Sorting options (relevance, date, title, etc.)
+- ✅ Pagination and result limiting
+- ✅ Search suggestions and autocomplete
+- ✅ Faceted search results
+
+### API Endpoints
+
+#### Search
+
+- `GET /search` - Search programs with filters
+- `GET /search/suggest` - Get search suggestions
+- `GET /search/facets` - Get available search facets
+
+#### Programs
+
+- `GET /programs/:id` - Get program details by ID
+- `GET /programs` - List programs with pagination
+
+#### Health
+
+- `GET /health` - Service health check
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- Elasticsearch instance
+- Environment variables configured
+
+### Development
 
 ```bash
-# development
-$ pnpm run start
+# Install dependencies (from root)
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
+# Start in development mode
+pnpm --filter discovery-api dev
 
-# production mode
-$ pnpm run start:prod
+# Or from the app directory
+cd apps/discovery-api
+pnpm dev
 ```
 
-## Run tests
+### Environment Variables
+
+Required environment variables (see root `.env.example`):
+
+```env
+# Elasticsearch
+ELASTICSEARCH_URL=http://localhost:9200
+ELASTICSEARCH_USERNAME=elastic
+ELASTICSEARCH_PASSWORD=changeme
+ELASTICSEARCH_INDEX_NAME=programs
+
+# API Configuration
+DISCOVERY_API_PORT=3002
+NODE_ENV=development
+
+# Optional: CORS
+CORS_ORIGINS=http://localhost:3000
+```
+
+## 📚 API Documentation
+
+Once running, access the Swagger documentation at:
+
+**http://localhost:3002/api**
+
+## 🧪 Testing
 
 ```bash
-# unit tests
-$ pnpm run test
+# Unit tests
+pnpm --filter discovery-api test
 
-# e2e tests
-$ pnpm run test:e2e
+# E2E tests
+pnpm --filter discovery-api test:e2e
 
-# test coverage
-$ pnpm run test:cov
+# Test coverage
+pnpm --filter discovery-api test:cov
+
+# Watch mode
+pnpm --filter discovery-api test:watch
 ```
 
-## Deployment
+## 🔧 Development
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Available Scripts
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Development
+pnpm dev                    # Start in development mode
+pnpm start                  # Start in production mode
+pnpm start:dev              # Start with watch mode
+pnpm start:debug            # Start in debug mode
+pnpm start:prod             # Start in production mode
+
+# Testing
+pnpm test                   # Run unit tests
+pnpm test:watch             # Run tests in watch mode
+pnpm test:cov               # Run tests with coverage
+pnpm test:debug             # Run tests in debug mode
+pnpm test:e2e               # Run e2e tests
+
+# Building
+pnpm build                  # Build the application
+pnpm build:watch            # Build in watch mode
+
+# Linting
+pnpm lint                   # Run ESLint
+pnpm lint:fix               # Fix ESLint issues
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Project Structure
 
-## Resources
+```
+apps/discovery-api/
+├── src/
+│   ├── app.module.ts           # Main application module
+│   ├── main.ts                 # Application entry point
+│   ├── common/                 # Shared utilities
+│   │   └── filters/            # Exception filters
+│   ├── health/                 # Health check endpoints
+│   └── search/                 # Search functionality
+│       ├── search.controller.ts
+│       ├── search.service.ts
+│       ├── search.module.ts
+│       ├── dto/                # Data transfer objects
+│       ├── services/           # Business logic services
+│       └── utils/              # Utility functions
+├── test/                       # E2E tests
+└── package.json
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🔄 Data Flow
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+1. **Content Indexing**: Sync Worker indexes programs from database to Elasticsearch
+2. **Search Requests**: Users query Discovery API with search parameters
+3. **Elasticsearch Query**: API translates requests to Elasticsearch queries
+4. **Result Processing**: Results are transformed and returned to users
+5. **Caching**: Frequently accessed data may be cached for performance
 
-## Support
+## 🔍 Search Features
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Query Types
 
-## Stay in touch
+- **Full-text search**: Search across title, description, and content
+- **Exact match**: Search for specific terms or phrases
+- **Fuzzy search**: Handle typos and variations
+- **Wildcard search**: Use \* and ? for pattern matching
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Filters
 
-## License
+- **Type**: Filter by program type
+- **Language**: Filter by program language
+- **Tags**: Filter by tags
+- **Date range**: Filter by creation/update dates
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Sorting
+
+- **Relevance**: Default sorting by search relevance
+- **Date**: Sort by creation or update date
+- **Title**: Sort alphabetically by title
+
+## 🔒 Security
+
+- Input validation and sanitization
+- Rate limiting to prevent abuse
+- CORS configuration for frontend access
+- Request/response logging
+- Error handling with proper HTTP status codes
+
+## 📊 Monitoring
+
+- Health check endpoint: `GET /health`
+- Elasticsearch connection monitoring
+- Search performance metrics
+- Request/response logging via interceptors
+- Error tracking and reporting
+
+## 🚀 Deployment
+
+### Docker
+
+```bash
+# Build image
+docker build --build-arg TARGET_APP=discovery-api -t thmanyah/discovery-api .
+
+# Run container
+docker run -p 3002:3002 --env-file .env thmanyah/discovery-api
+```
+
+### Production
+
+```bash
+# Build for production
+pnpm --filter discovery-api build
+
+# Start production server
+pnpm --filter discovery-api start:prod
+```
+
+## 🔧 Configuration
+
+### Elasticsearch Index
+
+The service manages an Elasticsearch index with the following mapping:
+
+```json
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "title": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": { "keyword": { "type": "keyword" } }
+      },
+      "description": { "type": "text", "analyzer": "standard" },
+      "type": { "type": "keyword" },
+      "language": { "type": "keyword" },
+      "tags": { "type": "keyword" },
+      "createdAt": { "type": "date" },
+      "updatedAt": { "type": "date" }
+    }
+  },
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}
+```
+
+### Performance Tuning
+
+- Configure Elasticsearch for optimal search performance
+- Implement caching for frequently accessed data
+- Use connection pooling for Elasticsearch
+- Monitor and optimize query performance
+
+## 🤝 Contributing
+
+1. Follow the project's coding standards
+2. Add tests for new search features
+3. Update API documentation
+4. Ensure all tests pass before submitting
+5. Consider search performance implications
+
+## 📄 License
+
+This project is part of the Thmanyah backend system and is licensed under the MIT License.

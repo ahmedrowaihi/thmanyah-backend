@@ -91,6 +91,16 @@ module "ecs" {
   # ECR repositories
   ecr_repository_names = var.ecr_repository_names
   docker_image_tags    = var.docker_image_tags
+
+  # CORS Configuration
+  cors_origins         = var.cors_origins
+  cors_allowed_headers = var.cors_allowed_headers
+
+  # OpenAPI/Swagger Configuration
+  cms_api_server_url           = var.cms_api_server_url
+  discovery_api_server_url     = var.discovery_api_server_url
+  cms_api_server_description   = var.cms_api_server_description
+  discovery_api_server_description = var.discovery_api_server_description
 }
 
 # Elasticsearch module (conditional) - now after ECS module
