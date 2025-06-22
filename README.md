@@ -8,6 +8,16 @@
 
 A modular, scalable backend system for managing and discovering media content (podcasts, documentaries, etc.) built with NestJS, TypeScript, and modern microservices architecture.
 
+## 🌐 Live Demo
+
+**🚀 Working APIs deployed on AWS ECS:**
+
+- **CMS API Documentation**: [http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3001/reference](http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3001/reference)
+- **Discovery API Documentation**: [http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3002/reference](http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3002/reference)
+- **Health Checks**:
+  - CMS API: [http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3001/v1/health](http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3001/v1/health)
+  - Discovery API: [http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3002/v1/health](http://thmanyah-backend-dev-alb-298183992.us-east-1.elb.amazonaws.com:3002/v1/health)
+
 ## 📋 Table of Contents
 
 - [🚀 Thmanyah Backend System](#-thmanyah-backend-system)
