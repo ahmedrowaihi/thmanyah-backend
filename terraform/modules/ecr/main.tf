@@ -2,6 +2,7 @@
 resource "aws_ecr_repository" "cms_api" {
   name                 = "${var.app_name}-${var.environment}-cms-api"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -17,6 +18,7 @@ resource "aws_ecr_repository" "cms_api" {
 resource "aws_ecr_repository" "discovery_api" {
   name                 = "${var.app_name}-${var.environment}-discovery-api"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -32,6 +34,7 @@ resource "aws_ecr_repository" "discovery_api" {
 resource "aws_ecr_repository" "outbox_publisher" {
   name                 = "${var.app_name}-${var.environment}-outbox-publisher"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -47,6 +50,7 @@ resource "aws_ecr_repository" "outbox_publisher" {
 resource "aws_ecr_repository" "sync_worker" {
   name                 = "${var.app_name}-${var.environment}-sync-worker"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
