@@ -274,27 +274,53 @@ resource "aws_lb_target_group" "discovery_api" {
   }
 }
 
-# ALB Listener for CMS API
-resource "aws_lb_listener" "cms_api" {
+# ALB Listener for HTTP (port 80)
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
-  port              = 3001
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.cms_api.arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not found"
+      status_code  = "404"
+    }
   }
 }
 
-# ALB Listener for Discovery API
-resource "aws_lb_listener" "discovery_api" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = 3002
-  protocol          = "HTTP"
+# Listener rule for CMS API (routes /cms* and / to CMS API)
+resource "aws_lb_listener_rule" "cms_api" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 10
 
-  default_action {
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.cms_api.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/cms*", "/"]
+    }
+  }
+}
+
+# Listener rule for Discovery API (routes /discovery* to Discovery API)
+resource "aws_lb_listener_rule" "discovery_api" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 20
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.discovery_api.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/discovery*"]
+    }
   }
 }
 
@@ -772,7 +798,7 @@ resource "aws_ecs_service" "cms_api" {
     container_port   = 3001
   }
 
-  depends_on = [aws_lb_listener.cms_api]
+  depends_on = [aws_lb_listener.http]
 
   tags = {
     Name        = "${var.app_name}-${var.environment}-cms-api-service"
@@ -800,7 +826,7 @@ resource "aws_ecs_service" "discovery_api" {
     container_port   = 3002
   }
 
-  depends_on = [aws_lb_listener.discovery_api]
+  depends_on = [aws_lb_listener.http]
 
   tags = {
     Name        = "${var.app_name}-${var.environment}-discovery-api-service"
